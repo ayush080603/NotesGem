@@ -1,7 +1,16 @@
+import { redirect } from "next/navigation";
+import { getUser } from "@/auth/server";
 import AuthForm from "@/components/AuthForm";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
-function LoginPage() {
+export default async function LoginPage() {
+  const user = await getUser();
+
+  // If already logged in → send to home
+  if (user) {
+    redirect("/");
+  }
+
   return (
     <div className="mt-20 flex flex-1 flex-col items-center">
       <Card className="w-full max-w-md">
@@ -14,5 +23,3 @@ function LoginPage() {
     </div>
   );
 }
-
-export default LoginPage;

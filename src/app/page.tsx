@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { getUser } from "@/auth/server";
 import AskAIButton from "@/components/AskAIButton";
 import NewNoteButton from "@/components/NewNoteButton";
@@ -6,28 +7,59 @@ import HomeToast from "@/components/HomeToast";
 import { prisma } from "@/db/prisma";
 
 type Props = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
-async function HomePage({ searchParams }: Props) {
-  const noteIdParam = (await searchParams).noteId;
+export default async function HomePage({ searchParams }: Props) {
   const user = await getUser();
 
+  // If not logged in → go to login page
+  if (!user) {
+    redirect("/login");
+  }
+
+  // Normalize noteId
+  const noteIdParam = searchParams.noteId;
   const noteId = Array.isArray(noteIdParam)
-    ? noteIdParam![0]
+    ? noteIdParam[0]
     : noteIdParam || "";
 
-  const note = await prisma.note.findUnique({
-    where: { id: noteId, authorId: user?.id },
-    select: {
-    id: true,
-    text: true,
-    title: true,   // ✅ include title here
-    createdAt: true,
-    updatedAt: true,
-    },
-  });
+  let note = null;
 
+  if (noteId) {
+    // Try fetching the note
+    note = await prisma.note.findUnique({
+      where: { id: noteId, authorId: user.id },
+      select: {
+        id: true,
+        text: true,
+        title: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  }
+
+  // If no noteId in URL, or note not found → redirect to newest or create new
+  if (!note) {
+    const newestNote = await prisma.note.findFirst({
+      where: { authorId: user.id },
+      orderBy: { createdAt: "desc" },
+      select: { id: true },
+    });
+
+    if (newestNote) {
+      redirect(`/?noteId=${newestNote.id}`);
+    } else {
+      const newNote = await prisma.note.create({
+        data: { authorId: user.id, text: "", title: "Untitled" },
+        select: { id: true },
+      });
+      redirect(`/?noteId=${newNote.id}`);
+    }
+  }
+
+  // Render page if note exists
   return (
     <div className="flex h-full flex-col items-center gap-4">
       <div className="flex w-full max-w-4xl justify-end gap-2">
@@ -35,11 +67,9 @@ async function HomePage({ searchParams }: Props) {
         <NewNoteButton user={user} />
       </div>
 
-      <NoteTextInput noteId={noteId} startingNoteText={note?.text || ""} />
+      <NoteTextInput noteId={note.id} startingNoteText={note.text || ""} />
 
       <HomeToast />
     </div>
   );
 }
-
-export default HomePage;
