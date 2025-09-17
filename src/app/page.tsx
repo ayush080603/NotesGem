@@ -19,6 +19,13 @@ async function HomePage({ searchParams }: Props) {
 
   const note = await prisma.note.findUnique({
     where: { id: noteId, authorId: user?.id },
+    select: {
+    id: true,
+    text: true,
+    title: true,   // ✅ include title here
+    createdAt: true,
+    updatedAt: true,
+    },
   });
 
   return (

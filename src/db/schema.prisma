@@ -10,6 +10,7 @@ generator client {
 model Note {
   id        String     @id @default(uuid())
   text      String
+  title     String     @default("Untitled Note")
   author    User       @relation(fields: [authorId], references: [id])
   authorId  String
   createdAt DateTime   @default(now())

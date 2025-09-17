@@ -101,7 +101,7 @@ function AskAIButton({ user }: Props) {
         <DialogHeader>
           <DialogTitle>Ask AI About Your Notes</DialogTitle>
           <DialogDescription>
-            Out AI can answer questions about all of your notes
+            AI can answer questions about all of your notes
           </DialogDescription>
         </DialogHeader>
 
@@ -140,7 +140,10 @@ function AskAIButton({ user }: Props) {
             value={questionText}
             onChange={(e) => setQuestionText(e.target.value)}
           />
-          <Button className="ml-auto size-8 rounded-full">
+          <Button
+            className="ml-auto size-8 rounded-full size-8"
+            onClick={handleSubmit}
+          >
             <ArrowUpIcon className="text-background" />
           </Button>
         </div>

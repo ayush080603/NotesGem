@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SidebarMenuButton } from "./ui/sidebar";
 import Link from "next/link";
+import { format } from "date-fns";
 
 type Props = {
   note: Note;
@@ -32,7 +33,7 @@ function SelectNoteButton({ note }: Props) {
     }
   }, [selectedNoteText, shouldUseGlobalNoteText]);
 
-  const blankNoteText = "EMPTY NOTE";
+  const blankNoteText = "Empty Note";
   let noteText = localNoteText || blankNoteText;
   if (shouldUseGlobalNoteText) {
     noteText = selectedNoteText || blankNoteText;
@@ -44,11 +45,14 @@ function SelectNoteButton({ note }: Props) {
       className={`items-start gap-0 pr-12 ${note.id === noteId && "bg-sidebar-accent/50"}`}
     >
       <Link href={`/?noteId=${note.id}`} className="flex h-fit flex-col">
-        <p className="w-full overflow-hidden truncate text-ellipsis whitespace-nowrap">
-          {noteText}
+        <p className="w-full overflow-hidden truncate text-ellipsis whitespace-nowrap font-medium">
+          {note.title || noteText}
         </p>
+        {/* <p className="w-full overflow-hidden truncate text-ellipsis whitespace-nowrap text-sm text-muted-foreground">
+          {noteText}
+        </p> */}
         <p className="text-muted-foreground text-xs">
-          {note.updatedAt.toLocaleDateString()}
+          {format(new Date(note.updatedAt), "dd/MM/yyyy")}
         </p>
       </Link>
     </SidebarMenuButton>

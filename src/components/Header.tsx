@@ -17,21 +17,19 @@ async function Header() {
         boxShadow: shadow,
       }}
     >
-      <SidebarTrigger className="absolute left-1 top-1" />
+      <SidebarTrigger className="absolute left-1 top-8 scale-150" />
 
-      <Link className="flex items-end gap-2" href="/">
+      <Link className="flex items-end gap-2 ml-2.5" href="/">
         <Image
-          src="/goatius.png"
-          height={60}
-          width={60}
+          src="/logo.png"
+          height={50}
+          width={50}
           alt="logo"
-          className="rounded-full"
+          className="dark:invert"
           priority
         />
 
-        <h1 className="flex flex-col pb-1 text-2xl font-semibold leading-6">
-          GOAT <span>Notes</span>
-        </h1>
+        <h1 className="flex flex-col pb-2 text-2xl font-semibold leading-3">NotesGem</h1>
       </Link>
 
       <div className="flex gap-4">

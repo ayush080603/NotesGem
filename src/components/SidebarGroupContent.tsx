@@ -12,6 +12,7 @@ import { useEffect, useMemo, useState } from "react";
 import Fuse from "fuse.js";
 import SelectNoteButton from "./SelectNoteButton";
 import DeleteNoteButton from "./DeleteNoteButton";
+import RenameNoteButton from "./RenameNoteButton";
 
 type Props = {
   notes: Note[];
@@ -27,7 +28,7 @@ function SidebarGroupContent({ notes }: Props) {
 
   const fuse = useMemo(() => {
     return new Fuse(localNotes, {
-      keys: ["text"],
+      keys: ["text", "title"],
       threshold: 0.4,
     });
   }, [localNotes]);
@@ -40,6 +41,10 @@ function SidebarGroupContent({ notes }: Props) {
     setLocalNotes((prevNotes) =>
       prevNotes.filter((note) => note.id !== noteId),
     );
+  };
+
+  const renameNoteLocally = (noteId: string, newTitle: string) => {
+    setLocalNotes((prev) => prev.map((n) => (n.id === noteId ? { ...n, title: newTitle } : n)));
   };
 
   return (
@@ -58,6 +63,12 @@ function SidebarGroupContent({ notes }: Props) {
         {filteredNotes.map((note) => (
           <SidebarMenuItem key={note.id} className="group/item">
             <SelectNoteButton note={note} />
+
+            <RenameNoteButton
+              noteId={note.id}
+              currentTitle={note.title || ""}
+              renameNoteLocally={renameNoteLocally}
+            />
 
             <DeleteNoteButton
               noteId={note.id}
