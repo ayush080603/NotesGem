@@ -5,19 +5,26 @@ import NewNoteButton from "@/components/NewNoteButton";
 import NoteTextInput from "@/components/NoteTextInput";
 import HomeToast from "@/components/HomeToast";
 import { prisma } from "@/db/prisma";
+import { NextPage } from "next";
 
-export default async function HomePage({
+// Define the props type using NextPage
+type Props = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+// Use NextPage to type the component
+const HomePage: NextPage<Props> = async ({
   searchParams,
-}: {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
+}) => {
   const user = await getUser();
 
   if (!user) {
     redirect("/login");
   }
 
-  const noteIdParam = searchParams?.noteId;
+  // Resolve the searchParams Promise
+  const resolvedSearchParams = await searchParams;
+  const noteIdParam = resolvedSearchParams.noteId;
   const noteId = Array.isArray(noteIdParam)
     ? noteIdParam[0]
     : noteIdParam || "";
@@ -27,13 +34,7 @@ export default async function HomePage({
   if (noteId) {
     note = await prisma.note.findUnique({
       where: { id: noteId, authorId: user.id },
-      select: {
-        id: true,
-        text: true,
-        title: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: { id: true, text: true, title: true, createdAt: true, updatedAt: true },
     });
   }
 
@@ -61,10 +62,10 @@ export default async function HomePage({
         <AskAIButton user={user} />
         <NewNoteButton user={user} />
       </div>
-
       <NoteTextInput noteId={note.id} startingNoteText={note.text || ""} />
-
       <HomeToast />
     </div>
   );
-}
+};
+
+export default HomePage;
