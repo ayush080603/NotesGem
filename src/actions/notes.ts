@@ -105,7 +105,7 @@ export const askAIAboutNotesAction = async (
     .join("\n");
 
 
-  let prompt = `
+  const prompt = `
     You are a helpful assistant that answers questions about a user's notes. 
     Assume all questions are related to the user's notes. 
     Make sure that your answers are not too verbose and you speak succinctly. 
@@ -121,7 +121,7 @@ export const askAIAboutNotesAction = async (
     ${formattedNotes}
   `.trim();
 
-  let conversation = [prompt];
+  const conversation = [prompt];
   for (let i = 0; i < newQuestions.length; i++) {
     conversation.push(newQuestions[i]);
     if (responses.length > i) {
