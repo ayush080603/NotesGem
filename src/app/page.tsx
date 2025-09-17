@@ -6,20 +6,18 @@ import NoteTextInput from "@/components/NoteTextInput";
 import HomeToast from "@/components/HomeToast";
 import { prisma } from "@/db/prisma";
 
-type Props = {
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
-export default async function HomePage({ searchParams }: Props) {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
   const user = await getUser();
 
-  // If not logged in → go to login page
   if (!user) {
     redirect("/login");
   }
 
-  // Normalize noteId
-  const noteIdParam = searchParams.noteId;
+  const noteIdParam = searchParams?.noteId;
   const noteId = Array.isArray(noteIdParam)
     ? noteIdParam[0]
     : noteIdParam || "";
@@ -27,7 +25,6 @@ export default async function HomePage({ searchParams }: Props) {
   let note = null;
 
   if (noteId) {
-    // Try fetching the note
     note = await prisma.note.findUnique({
       where: { id: noteId, authorId: user.id },
       select: {
@@ -40,7 +37,6 @@ export default async function HomePage({ searchParams }: Props) {
     });
   }
 
-  // If no noteId in URL, or note not found → redirect to newest or create new
   if (!note) {
     const newestNote = await prisma.note.findFirst({
       where: { authorId: user.id },
@@ -59,7 +55,6 @@ export default async function HomePage({ searchParams }: Props) {
     }
   }
 
-  // Render page if note exists
   return (
     <div className="flex h-full flex-col items-center gap-4">
       <div className="flex w-full max-w-4xl justify-end gap-2">
