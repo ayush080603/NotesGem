@@ -5,20 +5,22 @@ import NewNoteButton from "@/components/NewNoteButton";
 import NoteTextInput from "@/components/NoteTextInput";
 import HomeToast from "@/components/HomeToast";
 import { prisma } from "@/db/prisma";
-import { NextPage } from "next";
 
+// Define Props to match Next.js PageProps
 type Props = {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }> | undefined;
 };
 
-const HomePage: NextPage<Props> = async ({ searchParams }) => {
+const HomePage = async ({ searchParams }: Props) => {
   const user = await getUser();
 
   if (!user) {
     redirect("/login");
   }
 
-  const noteIdParam = searchParams.noteId;
+  // Await searchParams if it exists
+  const resolvedSearchParams = await searchParams;
+  const noteIdParam = resolvedSearchParams?.noteId;
   const noteId = Array.isArray(noteIdParam)
     ? noteIdParam[0]
     : noteIdParam || "";
@@ -48,11 +50,6 @@ const HomePage: NextPage<Props> = async ({ searchParams }) => {
       });
       redirect(`/?noteId=${newNote.id}`);
     }
-  }
-
-  // ✅ safeguard
-  if (!note) {
-    return null;
   }
 
   return (
