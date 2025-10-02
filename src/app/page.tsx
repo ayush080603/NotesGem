@@ -7,24 +7,18 @@ import HomeToast from "@/components/HomeToast";
 import { prisma } from "@/db/prisma";
 import { NextPage } from "next";
 
-// Define the props type using NextPage
 type Props = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
-// Use NextPage to type the component
-const HomePage: NextPage<Props> = async ({
-  searchParams,
-}) => {
+const HomePage: NextPage<Props> = async ({ searchParams }) => {
   const user = await getUser();
 
   if (!user) {
     redirect("/login");
   }
 
-  // Resolve the searchParams Promise
-  const resolvedSearchParams = await searchParams;
-  const noteIdParam = resolvedSearchParams.noteId;
+  const noteIdParam = searchParams.noteId;
   const noteId = Array.isArray(noteIdParam)
     ? noteIdParam[0]
     : noteIdParam || "";
@@ -54,6 +48,11 @@ const HomePage: NextPage<Props> = async ({
       });
       redirect(`/?noteId=${newNote.id}`);
     }
+  }
+
+  // ✅ safeguard
+  if (!note) {
+    return null;
   }
 
   return (
