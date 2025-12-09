@@ -171,16 +171,6 @@ src/styles/ai-response.css
 
 ---
 
-## Screenshots
-
-(Replace these placeholders with actual images)
-
-- Screenshot: Sidebar and notes list
-- Screenshot: Editor view
-- Screenshot: Gemini AI chat response
-
----
-
 ## Future Enhancements
 
 Planned features:
