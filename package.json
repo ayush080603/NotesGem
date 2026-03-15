@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "migrate": "pnpm dlx prisma generate && env $(cat .env.local | xargs) pnpm dlx prisma migrate dev"
+    "postinstall": "pnpm dlx prisma generate"
   },
   "dependencies": {
     "@google/genai": "^1.19.0",
