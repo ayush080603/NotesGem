@@ -208,3 +208,4 @@ This project is licensed under the MIT License. See the LICENSE file for details
 Ayush Sinha  
 Next.js • AI • Supabase • Full-Stack Developer  
 GitHub: [@ayush080603](https://github.com/ayush080603)
+Email: sinhaayush0806@gmail.com
