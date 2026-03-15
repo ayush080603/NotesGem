@@ -7,8 +7,4 @@ export default defineConfig({
   migrations: {
     path: path.join('src', 'db', 'migrations'),
   },
-
-  datasource: {
-    url: process.env.DATABASE_URL,
-  },
 })
