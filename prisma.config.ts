@@ -3,7 +3,12 @@ import path from 'node:path'
 
 export default defineConfig({
   schema: path.join('src', 'db', 'schema.prisma'),
+
   migrations: {
     path: path.join('src', 'db', 'migrations'),
+  },
+
+  datasource: {
+    url: process.env.DATABASE_URL,
   },
 })
