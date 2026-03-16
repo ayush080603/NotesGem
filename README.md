@@ -45,7 +45,7 @@ NotesGem is an intelligent, modern note-taking application powered by Google Gem
   - Real-time sidebar updates
   - Smart search using Fuse.js
 
-- 🤖 AI Assistant (Gemini 1.5 Flash)
+- 🤖 AI Assistant (Gemini 2.5 Flash)
   - Ask questions about all your notes
   - Clean, readable, HTML-formatted responses
   - Supports headings, bold, lists, paragraphs, etc.
@@ -73,7 +73,7 @@ NotesGem is an intelligent, modern note-taking application powered by Google Gem
 | Frontend  | Next.js 15, React 19, Tailwind CSS, ShadCN |
 | Backend   | Prisma, PostgreSQL |
 | Auth      | Supabase Auth |
-| AI        | Google Gemini 1.5 Flash |
+| AI        | Google Gemini 2.5 Flash |
 | Deployment| Vercel |
 | Language  | TypeScript |
 
@@ -146,7 +146,7 @@ Open: http://localhost:3000
 
 ---
 
-## AI Integration (Gemini 1.5 Flash)
+## AI Integration (Gemini 2.5 Flash)
 
 AI logic for Questions & Answers lives in:
 
